@@ -4,7 +4,7 @@
 #
 Name     : clutter-gtk
 Version  : 1.8.2
-Release  : 1
+Release  : 2
 URL      : https://download.gnome.org/core/3.22/3.22.0/sources/clutter-gtk-1.8.2.tar.xz
 Source0  : https://download.gnome.org/core/3.22/3.22.0/sources/clutter-gtk-1.8.2.tar.xz
 Summary  : GTK+ integration for Clutter
@@ -76,6 +76,7 @@ locales components for the clutter-gtk package.
 
 %build
 export LANG=C
+export SOURCE_DATE_EPOCH=1491313406
 %configure --disable-static
 make V=1  %{?_smp_mflags}
 
@@ -87,6 +88,7 @@ export no_proxy=localhost
 make VERBOSE=1 V=1 %{?_smp_mflags} check
 
 %install
+export SOURCE_DATE_EPOCH=1491313406
 rm -rf %{buildroot}
 %make_install
 %find_lang cluttergtk-1.0
@@ -96,7 +98,8 @@ rm -rf %{buildroot}
 
 %files data
 %defattr(-,root,root,-)
-/usr/share/gir-1.0/GtkClutter-1.0.gir
+/usr/lib64/girepository-1.0/GtkClutter-1.0.typelib
+/usr/share/gir-1.0/*.gir
 
 %files dev
 %defattr(-,root,root,-)
@@ -107,9 +110,8 @@ rm -rf %{buildroot}
 /usr/include/clutter-gtk-1.0/clutter-gtk/gtk-clutter-util.h
 /usr/include/clutter-gtk-1.0/clutter-gtk/gtk-clutter-version.h
 /usr/include/clutter-gtk-1.0/clutter-gtk/gtk-clutter-window.h
-/usr/lib64/*.so
-/usr/lib64/girepository-1.0/GtkClutter-1.0.typelib
-/usr/lib64/pkgconfig/*.pc
+/usr/lib64/libclutter-gtk-1.0.so
+/usr/lib64/pkgconfig/clutter-gtk-1.0.pc
 
 %files doc
 %defattr(-,root,root,-)
@@ -146,8 +148,9 @@ rm -rf %{buildroot}
 
 %files lib
 %defattr(-,root,root,-)
-/usr/lib64/*.so.*
+/usr/lib64/libclutter-gtk-1.0.so.0
+/usr/lib64/libclutter-gtk-1.0.so.0.800.2
 
-%files locales -f cluttergtk-1.0.lang 
+%files locales -f cluttergtk-1.0.lang
 %defattr(-,root,root,-)
 
