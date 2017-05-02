@@ -4,9 +4,9 @@
 #
 Name     : clutter-gtk
 Version  : 1.8.2
-Release  : 2
-URL      : https://download.gnome.org/core/3.22/3.22.0/sources/clutter-gtk-1.8.2.tar.xz
-Source0  : https://download.gnome.org/core/3.22/3.22.0/sources/clutter-gtk-1.8.2.tar.xz
+Release  : 3
+URL      : https://download.gnome.org/sources/clutter-gtk/1.8/clutter-gtk-1.8.2.tar.xz
+Source0  : https://download.gnome.org/sources/clutter-gtk/1.8/clutter-gtk-1.8.2.tar.xz
 Summary  : GTK+ integration for Clutter
 Group    : Development/Tools
 License  : LGPL-2.1
@@ -22,6 +22,7 @@ BuildRequires : gtk-doc-dev
 BuildRequires : libxslt-bin
 BuildRequires : perl(XML::Parser)
 BuildRequires : pkgconfig(clutter-1.0)
+BuildRequires : pkgconfig(gtk+-3.0)
 
 %description
 Clutter-GTK - GTK+ Integration library for Clutter
@@ -75,8 +76,11 @@ locales components for the clutter-gtk package.
 %setup -q -n clutter-gtk-1.8.2
 
 %build
+export http_proxy=http://127.0.0.1:9/
+export https_proxy=http://127.0.0.1:9/
+export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C
-export SOURCE_DATE_EPOCH=1491313406
+export SOURCE_DATE_EPOCH=1493739131
 %configure --disable-static
 make V=1  %{?_smp_mflags}
 
@@ -84,11 +88,11 @@ make V=1  %{?_smp_mflags}
 export LANG=C
 export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
-export no_proxy=localhost
+export no_proxy=localhost,127.0.0.1,0.0.0.0
 make VERBOSE=1 V=1 %{?_smp_mflags} check
 
 %install
-export SOURCE_DATE_EPOCH=1491313406
+export SOURCE_DATE_EPOCH=1493739131
 rm -rf %{buildroot}
 %make_install
 %find_lang cluttergtk-1.0
