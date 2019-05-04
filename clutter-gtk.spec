@@ -4,19 +4,20 @@
 #
 Name     : clutter-gtk
 Version  : 1.8.4
-Release  : 7
+Release  : 8
 URL      : https://download.gnome.org/sources/clutter-gtk/1.8/clutter-gtk-1.8.4.tar.xz
 Source0  : https://download.gnome.org/sources/clutter-gtk/1.8/clutter-gtk-1.8.4.tar.xz
-Summary  : GTK+ integration for Clutter
+Summary  : Clutter integration with GTK+
 Group    : Development/Tools
-License  : LGPL-2.1
-Requires: clutter-gtk-lib
-Requires: clutter-gtk-doc
-Requires: clutter-gtk-locales
-Requires: clutter-gtk-data
+License  : LGPL-2.0 LGPL-2.1
+Requires: clutter-gtk-data = %{version}-%{release}
+Requires: clutter-gtk-lib = %{version}-%{release}
+Requires: clutter-gtk-license = %{version}-%{release}
+Requires: clutter-gtk-locales = %{version}-%{release}
+BuildRequires : buildreq-gnome
+BuildRequires : buildreq-meson
 BuildRequires : docbook-xml
 BuildRequires : gettext
-BuildRequires : gobject-introspection-dev
 BuildRequires : gtk-doc
 BuildRequires : gtk-doc-dev
 BuildRequires : libxslt-bin
@@ -39,9 +40,10 @@ data components for the clutter-gtk package.
 %package dev
 Summary: dev components for the clutter-gtk package.
 Group: Development
-Requires: clutter-gtk-lib
-Requires: clutter-gtk-data
-Provides: clutter-gtk-devel
+Requires: clutter-gtk-lib = %{version}-%{release}
+Requires: clutter-gtk-data = %{version}-%{release}
+Provides: clutter-gtk-devel = %{version}-%{release}
+Requires: clutter-gtk = %{version}-%{release}
 
 %description dev
 dev components for the clutter-gtk package.
@@ -58,10 +60,19 @@ doc components for the clutter-gtk package.
 %package lib
 Summary: lib components for the clutter-gtk package.
 Group: Libraries
-Requires: clutter-gtk-data
+Requires: clutter-gtk-data = %{version}-%{release}
+Requires: clutter-gtk-license = %{version}-%{release}
 
 %description lib
 lib components for the clutter-gtk package.
+
+
+%package license
+Summary: license components for the clutter-gtk package.
+Group: Default
+
+%description license
+license components for the clutter-gtk package.
 
 
 %package locales
@@ -80,9 +91,16 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C
-export SOURCE_DATE_EPOCH=1502307063
+export SOURCE_DATE_EPOCH=1556994741
+export AR=gcc-ar
+export RANLIB=gcc-ranlib
+export NM=gcc-nm
+export CFLAGS="$CFLAGS -O3 -ffat-lto-objects -flto=4 "
+export FCFLAGS="$CFLAGS -O3 -ffat-lto-objects -flto=4 "
+export FFLAGS="$CFLAGS -O3 -ffat-lto-objects -flto=4 "
+export CXXFLAGS="$CXXFLAGS -O3 -ffat-lto-objects -flto=4 "
 %configure --disable-static
-make V=1  %{?_smp_mflags}
+make  %{?_smp_mflags}
 
 %check
 export LANG=C
@@ -92,8 +110,11 @@ export no_proxy=localhost,127.0.0.1,0.0.0.0
 make VERBOSE=1 V=1 %{?_smp_mflags} check
 
 %install
-export SOURCE_DATE_EPOCH=1502307063
+export SOURCE_DATE_EPOCH=1556994741
 rm -rf %{buildroot}
+mkdir -p %{buildroot}/usr/share/package-licenses/clutter-gtk
+cp COPYING %{buildroot}/usr/share/package-licenses/clutter-gtk/COPYING
+cp doc/html/license.html %{buildroot}/usr/share/package-licenses/clutter-gtk/doc_html_license.html
 %make_install
 %find_lang cluttergtk-1.0
 
@@ -118,7 +139,7 @@ rm -rf %{buildroot}
 /usr/lib64/pkgconfig/clutter-gtk-1.0.pc
 
 %files doc
-%defattr(-,root,root,-)
+%defattr(0644,root,root,0755)
 /usr/share/gtk-doc/html/clutter-gtk-1.0/GtkClutterActor.html
 /usr/share/gtk-doc/html/clutter-gtk-1.0/GtkClutterEmbed.html
 /usr/share/gtk-doc/html/clutter-gtk-1.0/GtkClutterWindow.html
@@ -149,6 +170,11 @@ rm -rf %{buildroot}
 %defattr(-,root,root,-)
 /usr/lib64/libclutter-gtk-1.0.so.0
 /usr/lib64/libclutter-gtk-1.0.so.0.800.4
+
+%files license
+%defattr(0644,root,root,0755)
+/usr/share/package-licenses/clutter-gtk/COPYING
+/usr/share/package-licenses/clutter-gtk/doc_html_license.html
 
 %files locales -f cluttergtk-1.0.lang
 %defattr(-,root,root,-)
