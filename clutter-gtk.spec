@@ -4,10 +4,10 @@
 #
 Name     : clutter-gtk
 Version  : 1.8.4
-Release  : 9
+Release  : 10
 URL      : https://download.gnome.org/sources/clutter-gtk/1.8/clutter-gtk-1.8.4.tar.xz
 Source0  : https://download.gnome.org/sources/clutter-gtk/1.8/clutter-gtk-1.8.4.tar.xz
-Summary  : Clutter integration with GTK+
+Summary  : GTK+ integration for Clutter
 Group    : Development/Tools
 License  : LGPL-2.0 LGPL-2.1
 Requires: clutter-gtk-data = %{version}-%{release}
@@ -85,36 +85,38 @@ locales components for the clutter-gtk package.
 
 %prep
 %setup -q -n clutter-gtk-1.8.4
+cd %{_builddir}/clutter-gtk-1.8.4
 
 %build
 export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
-export LANG=C
-export SOURCE_DATE_EPOCH=1556994741
+export LANG=C.UTF-8
+export SOURCE_DATE_EPOCH=1586223157
+export GCC_IGNORE_WERROR=1
 export AR=gcc-ar
 export RANLIB=gcc-ranlib
 export NM=gcc-nm
 export CFLAGS="$CFLAGS -O3 -ffat-lto-objects -flto=4 "
-export FCFLAGS="$CFLAGS -O3 -ffat-lto-objects -flto=4 "
-export FFLAGS="$CFLAGS -O3 -ffat-lto-objects -flto=4 "
+export FCFLAGS="$FFLAGS -O3 -ffat-lto-objects -flto=4 "
+export FFLAGS="$FFLAGS -O3 -ffat-lto-objects -flto=4 "
 export CXXFLAGS="$CXXFLAGS -O3 -ffat-lto-objects -flto=4 "
 %configure --disable-static
 make  %{?_smp_mflags}
 
 %check
-export LANG=C
+export LANG=C.UTF-8
 export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 make VERBOSE=1 V=1 %{?_smp_mflags} check
 
 %install
-export SOURCE_DATE_EPOCH=1556994741
+export SOURCE_DATE_EPOCH=1586223157
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/clutter-gtk
-cp COPYING %{buildroot}/usr/share/package-licenses/clutter-gtk/COPYING
-cp doc/html/license.html %{buildroot}/usr/share/package-licenses/clutter-gtk/doc_html_license.html
+cp %{_builddir}/clutter-gtk-1.8.4/COPYING %{buildroot}/usr/share/package-licenses/clutter-gtk/e60c2e780886f95df9c9ee36992b8edabec00bcc
+cp %{_builddir}/clutter-gtk-1.8.4/doc/html/license.html %{buildroot}/usr/share/package-licenses/clutter-gtk/fcc5f7c717e2010765c0563e1d754283d6debab0
 %make_install
 %find_lang cluttergtk-1.0
 
@@ -173,8 +175,8 @@ cp doc/html/license.html %{buildroot}/usr/share/package-licenses/clutter-gtk/doc
 
 %files license
 %defattr(0644,root,root,0755)
-/usr/share/package-licenses/clutter-gtk/COPYING
-/usr/share/package-licenses/clutter-gtk/doc_html_license.html
+/usr/share/package-licenses/clutter-gtk/e60c2e780886f95df9c9ee36992b8edabec00bcc
+/usr/share/package-licenses/clutter-gtk/fcc5f7c717e2010765c0563e1d754283d6debab0
 
 %files locales -f cluttergtk-1.0.lang
 %defattr(-,root,root,-)
