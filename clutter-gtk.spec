@@ -4,13 +4,14 @@
 #
 Name     : clutter-gtk
 Version  : 1.8.4
-Release  : 11
+Release  : 12
 URL      : https://download.gnome.org/sources/clutter-gtk/1.8/clutter-gtk-1.8.4.tar.xz
 Source0  : https://download.gnome.org/sources/clutter-gtk/1.8/clutter-gtk-1.8.4.tar.xz
 Summary  : GTK+ integration for Clutter
 Group    : Development/Tools
 License  : LGPL-2.0 LGPL-2.1
 Requires: clutter-gtk-data = %{version}-%{release}
+Requires: clutter-gtk-filemap = %{version}-%{release}
 Requires: clutter-gtk-lib = %{version}-%{release}
 Requires: clutter-gtk-license = %{version}-%{release}
 Requires: clutter-gtk-locales = %{version}-%{release}
@@ -57,11 +58,20 @@ Group: Documentation
 doc components for the clutter-gtk package.
 
 
+%package filemap
+Summary: filemap components for the clutter-gtk package.
+Group: Default
+
+%description filemap
+filemap components for the clutter-gtk package.
+
+
 %package lib
 Summary: lib components for the clutter-gtk package.
 Group: Libraries
 Requires: clutter-gtk-data = %{version}-%{release}
 Requires: clutter-gtk-license = %{version}-%{release}
+Requires: clutter-gtk-filemap = %{version}-%{release}
 
 %description lib
 lib components for the clutter-gtk package.
@@ -86,39 +96,58 @@ locales components for the clutter-gtk package.
 %prep
 %setup -q -n clutter-gtk-1.8.4
 cd %{_builddir}/clutter-gtk-1.8.4
+pushd ..
+cp -a clutter-gtk-1.8.4 buildavx2
+popd
 
 %build
 export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1586223157
+export SOURCE_DATE_EPOCH=1634314792
 export GCC_IGNORE_WERROR=1
 export AR=gcc-ar
 export RANLIB=gcc-ranlib
 export NM=gcc-nm
-export CFLAGS="$CFLAGS -O3 -ffat-lto-objects -flto=4 "
-export FCFLAGS="$FFLAGS -O3 -ffat-lto-objects -flto=4 "
-export FFLAGS="$FFLAGS -O3 -ffat-lto-objects -flto=4 "
-export CXXFLAGS="$CXXFLAGS -O3 -ffat-lto-objects -flto=4 "
+export CFLAGS="$CFLAGS -O3 -ffat-lto-objects -flto=auto "
+export FCFLAGS="$FFLAGS -O3 -ffat-lto-objects -flto=auto "
+export FFLAGS="$FFLAGS -O3 -ffat-lto-objects -flto=auto "
+export CXXFLAGS="$CXXFLAGS -O3 -ffat-lto-objects -flto=auto "
 %configure --disable-static
 make  %{?_smp_mflags}
 
+unset PKG_CONFIG_PATH
+pushd ../buildavx2/
+export CFLAGS="$CFLAGS -m64 -march=x86-64-v3"
+export CXXFLAGS="$CXXFLAGS -m64 -march=x86-64-v3"
+export FFLAGS="$FFLAGS -m64 -march=x86-64-v3"
+export FCFLAGS="$FCFLAGS -m64 -march=x86-64-v3"
+export LDFLAGS="$LDFLAGS -m64 -march=x86-64-v3"
+%configure --disable-static
+make  %{?_smp_mflags}
+popd
 %check
 export LANG=C.UTF-8
 export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
-make VERBOSE=1 V=1 %{?_smp_mflags} check
+make %{?_smp_mflags} check
+cd ../buildavx2;
+make %{?_smp_mflags} check || :
 
 %install
-export SOURCE_DATE_EPOCH=1586223157
+export SOURCE_DATE_EPOCH=1634314792
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/clutter-gtk
 cp %{_builddir}/clutter-gtk-1.8.4/COPYING %{buildroot}/usr/share/package-licenses/clutter-gtk/e60c2e780886f95df9c9ee36992b8edabec00bcc
 cp %{_builddir}/clutter-gtk-1.8.4/doc/html/license.html %{buildroot}/usr/share/package-licenses/clutter-gtk/fcc5f7c717e2010765c0563e1d754283d6debab0
+pushd ../buildavx2/
+%make_install_v3
+popd
 %make_install
 %find_lang cluttergtk-1.0
+/usr/bin/elf-move.py avx2 %{buildroot}-v3 %{buildroot}/usr/share/clear/optimized-elf/ %{buildroot}/usr/share/clear/filemap/filemap-%{name}
 
 %files
 %defattr(-,root,root,-)
@@ -168,10 +197,15 @@ cp %{_builddir}/clutter-gtk-1.8.4/doc/html/license.html %{buildroot}/usr/share/p
 /usr/share/gtk-doc/html/clutter-gtk-1.0/up-insensitive.png
 /usr/share/gtk-doc/html/clutter-gtk-1.0/up.png
 
+%files filemap
+%defattr(-,root,root,-)
+/usr/share/clear/filemap/filemap-clutter-gtk
+
 %files lib
 %defattr(-,root,root,-)
 /usr/lib64/libclutter-gtk-1.0.so.0
 /usr/lib64/libclutter-gtk-1.0.so.0.800.4
+/usr/share/clear/optimized-elf/lib*
 
 %files license
 %defattr(0644,root,root,0755)
