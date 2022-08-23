@@ -4,7 +4,7 @@
 #
 Name     : clutter-gtk
 Version  : 1.8.4
-Release  : 19
+Release  : 20
 URL      : https://download.gnome.org/sources/clutter-gtk/1.8/clutter-gtk-1.8.4.tar.xz
 Source0  : https://download.gnome.org/sources/clutter-gtk/1.8/clutter-gtk-1.8.4.tar.xz
 Summary  : GTK+ integration for Clutter
