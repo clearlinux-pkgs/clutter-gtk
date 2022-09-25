@@ -4,7 +4,7 @@
 #
 Name     : clutter-gtk
 Version  : 1.8.4
-Release  : 22
+Release  : 23
 URL      : https://download.gnome.org/sources/clutter-gtk/1.8/clutter-gtk-1.8.4.tar.xz
 Source0  : https://download.gnome.org/sources/clutter-gtk/1.8/clutter-gtk-1.8.4.tar.xz
 Summary  : GTK+ integration for Clutter
@@ -95,7 +95,7 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1656098090
+export SOURCE_DATE_EPOCH=1664140590
 export GCC_IGNORE_WERROR=1
 export AR=gcc-ar
 export RANLIB=gcc-ranlib
@@ -127,11 +127,11 @@ cd ../buildavx2;
 make %{?_smp_mflags} check || :
 
 %install
-export SOURCE_DATE_EPOCH=1656098090
+export SOURCE_DATE_EPOCH=1664140590
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/clutter-gtk
-cp %{_builddir}/clutter-gtk-1.8.4/COPYING %{buildroot}/usr/share/package-licenses/clutter-gtk/e60c2e780886f95df9c9ee36992b8edabec00bcc
-cp %{_builddir}/clutter-gtk-1.8.4/doc/html/license.html %{buildroot}/usr/share/package-licenses/clutter-gtk/fcc5f7c717e2010765c0563e1d754283d6debab0
+cp %{_builddir}/clutter-gtk-%{version}/COPYING %{buildroot}/usr/share/package-licenses/clutter-gtk/e60c2e780886f95df9c9ee36992b8edabec00bcc || :
+cp %{_builddir}/clutter-gtk-%{version}/doc/html/license.html %{buildroot}/usr/share/package-licenses/clutter-gtk/fcc5f7c717e2010765c0563e1d754283d6debab0 || :
 pushd ../buildavx2/
 %make_install_v3
 popd
@@ -156,6 +156,7 @@ popd
 /usr/include/clutter-gtk-1.0/clutter-gtk/gtk-clutter-util.h
 /usr/include/clutter-gtk-1.0/clutter-gtk/gtk-clutter-version.h
 /usr/include/clutter-gtk-1.0/clutter-gtk/gtk-clutter-window.h
+/usr/lib64/glibc-hwcaps/x86-64-v3/libclutter-gtk-1.0.so
 /usr/lib64/libclutter-gtk-1.0.so
 /usr/lib64/pkgconfig/clutter-gtk-1.0.pc
 
@@ -189,7 +190,6 @@ popd
 
 %files lib
 %defattr(-,root,root,-)
-/usr/lib64/glibc-hwcaps/x86-64-v3/libclutter-gtk-1.0.so
 /usr/lib64/glibc-hwcaps/x86-64-v3/libclutter-gtk-1.0.so.0
 /usr/lib64/glibc-hwcaps/x86-64-v3/libclutter-gtk-1.0.so.0.800.4
 /usr/lib64/libclutter-gtk-1.0.so.0
