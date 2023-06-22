@@ -5,7 +5,7 @@
 #
 Name     : clutter-gtk
 Version  : 1.8.4
-Release  : 26
+Release  : 27
 URL      : https://download.gnome.org/sources/clutter-gtk/1.8/clutter-gtk-1.8.4.tar.xz
 Source0  : https://download.gnome.org/sources/clutter-gtk/1.8/clutter-gtk-1.8.4.tar.xz
 Summary  : GTK+ integration for Clutter
@@ -99,15 +99,15 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1682702899
+export SOURCE_DATE_EPOCH=1687466721
 export GCC_IGNORE_WERROR=1
 export AR=gcc-ar
 export RANLIB=gcc-ranlib
 export NM=gcc-nm
-export CFLAGS="$CFLAGS -O3 -fdebug-types-section -femit-struct-debug-baseonly -ffat-lto-objects -flto=auto -g1 -gno-column-info -gno-variable-location-views -gz "
-export FCFLAGS="$FFLAGS -O3 -fdebug-types-section -femit-struct-debug-baseonly -ffat-lto-objects -flto=auto -g1 -gno-column-info -gno-variable-location-views -gz "
-export FFLAGS="$FFLAGS -O3 -fdebug-types-section -femit-struct-debug-baseonly -ffat-lto-objects -flto=auto -g1 -gno-column-info -gno-variable-location-views -gz "
-export CXXFLAGS="$CXXFLAGS -O3 -fdebug-types-section -femit-struct-debug-baseonly -ffat-lto-objects -flto=auto -g1 -gno-column-info -gno-variable-location-views -gz "
+export CFLAGS="$CFLAGS -O3 -fdebug-types-section -femit-struct-debug-baseonly -ffat-lto-objects -flto=auto -g1 -gno-column-info -gno-variable-location-views -gz=zstd "
+export FCFLAGS="$FFLAGS -O3 -fdebug-types-section -femit-struct-debug-baseonly -ffat-lto-objects -flto=auto -g1 -gno-column-info -gno-variable-location-views -gz=zstd "
+export FFLAGS="$FFLAGS -O3 -fdebug-types-section -femit-struct-debug-baseonly -ffat-lto-objects -flto=auto -g1 -gno-column-info -gno-variable-location-views -gz=zstd "
+export CXXFLAGS="$CXXFLAGS -O3 -fdebug-types-section -femit-struct-debug-baseonly -ffat-lto-objects -flto=auto -g1 -gno-column-info -gno-variable-location-views -gz=zstd "
 %configure --disable-static
 make  %{?_smp_mflags}
 
@@ -131,7 +131,7 @@ cd ../buildavx2;
 make %{?_smp_mflags} check || :
 
 %install
-export SOURCE_DATE_EPOCH=1682702899
+export SOURCE_DATE_EPOCH=1687466721
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/clutter-gtk
 cp %{_builddir}/clutter-gtk-%{version}/COPYING %{buildroot}/usr/share/package-licenses/clutter-gtk/e60c2e780886f95df9c9ee36992b8edabec00bcc || :
@@ -153,7 +153,6 @@ popd
 
 %files dev
 %defattr(-,root,root,-)
-/V3/usr/lib64/libclutter-gtk-1.0.so
 /usr/include/clutter-gtk-1.0/clutter-gtk/clutter-gtk.h
 /usr/include/clutter-gtk-1.0/clutter-gtk/gtk-clutter-actor.h
 /usr/include/clutter-gtk-1.0/clutter-gtk/gtk-clutter-embed.h
@@ -194,7 +193,6 @@ popd
 
 %files lib
 %defattr(-,root,root,-)
-/V3/usr/lib64/libclutter-gtk-1.0.so.0
 /V3/usr/lib64/libclutter-gtk-1.0.so.0.800.4
 /usr/lib64/libclutter-gtk-1.0.so.0
 /usr/lib64/libclutter-gtk-1.0.so.0.800.4
